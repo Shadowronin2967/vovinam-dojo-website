@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vovinam Viet Vo Dao - Mon Dojo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .hero-bg {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    }
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    .form-input {
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .form-input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    .success-message {
+      display: none;
+      animation: slideIn 0.5s ease-out;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .loading {
+      display: none;
+    }
+    .spinner {
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #3b82f6;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+  <!-- HEADER -->
+  <header class="bg-blue-900 text-yellow-400 p-6 text-center shadow-lg">
+    <h1 class="text-4xl font-bold mb-2">Vovinam Việt Võ Đạo</h1>
+    <p class="text-lg font-medium">Force, Discipline et Respect</p>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero-bg text-white py-20 text-center">
+    <div class="container mx-auto px-6">
+      <h2 class="text-5xl font-bold mb-6">Bienvenue dans notre salle d'arts martiaux</h2>
+      <p class="text-xl max-w-3xl mx-auto mb-8 leading-relaxed">
+        Découvrez la puissance, la discipline et l'harmonie du <strong>Vovinam Việt Võ Đạo</strong>.  
+        Rejoignez notre communauté et développez votre esprit et votre corps dans un environnement respectueux et bienveillant.
+      </p>
+      <a href="#inscription" class="btn-primary inline-block px-8 py-4 rounded-lg font-bold text-lg">
+        S'inscrire maintenant
+      </a>
+    </div>
+  </section>
+
+  <!-- VALEURS -->
+  <section class="py-16 px-6 bg-white">
+    <div class="container mx-auto">
+      <h2 class="text-4xl font-bold text-center text-blue-900 mb-12">Nos Valeurs</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="card-hover bg-blue-50 p-8 rounded-xl text-center">
+          <div class="w-16 h-16 bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-yellow-400 text-2xl font-bold">💪</span>
+          </div>
+          <h3 class="text-xl font-bold text-blue-900 mb-3">Force</h3>
+          <p class="text-gray-700">Développez votre force physique et mentale à travers des techniques ancestrales.</p>
+        </div>
+        <div class="card-hover bg-yellow-50 p-8 rounded-xl text-center">
+          <div class="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-blue-900 text-2xl font-bold">🎯</span>
+          </div>
+          <h3 class="text-xl font-bold text-blue-900 mb-3">Discipline</h3>
+          <p class="text-gray-700">Apprenez la maîtrise de soi et la persévérance dans un cadre structuré.</p>
+        </div>
+        <div class="card-hover bg-blue-50 p-8 rounded-xl text-center">
+          <div class="w-16 h-16 bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-yellow-400 text-2xl font-bold">🤝</span>
+          </div>
+          <h3 class="text-xl font-bold text-blue-900 mb-3">Respect</h3>
+          <p class="text-gray-700">Cultivez le respect de soi, des autres et des traditions martiales.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HISTOIRE -->
+  <section class="py-16 px-6 bg-gray-100">
+    <div class="container mx-auto">
+      <h2 class="text-4xl font-bold text-center text-blue-900 mb-12">L'histoire du Vovinam Việt Võ Đạo</h2>
+      <div class="max-w-4xl mx-auto">
+        <div class="bg-white p-8 rounded-xl shadow-lg">
+          <p class="text-lg leading-relaxed text-gray-700 mb-6">
+            Le <strong>Vovinam Việt Võ Đạo</strong> est un art martial vietnamien fondé en 1938 par le maître 
+            <em>Nguyen Loc</em>. Il combine des techniques de poings, de pieds, de projections, de self-défense et d'armes traditionnelles.
+          </p>
+          <p class="text-lg leading-relaxed text-gray-700">
+            Plus qu'un simple sport de combat, le Vovinam véhicule des valeurs profondes : 
+            <strong>l'honneur, la discipline, la persévérance et le respect</strong>.  
+            Sa devise est : <em>« Être fort pour être utile »</em>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSCRIPTION -->
+  <section id="inscription" class="py-16 px-6 bg-blue-100">
+    <div class="container mx-auto">
+      <h2 class="text-4xl font-bold text-center text-blue-900 mb-12">Inscription</h2>
+      
+      <!-- Message de succès -->
+      <div id="success-message" class="success-message max-w-lg mx-auto mb-8 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg">
+        <strong>Merci !</strong> Votre inscription a été envoyée avec succès. Nous vous recontacterons bientôt.
+      </div>
+
+      <!-- Message d'erreur -->
+      <div id="error-message" class="success-message max-w-lg mx-auto mb-8 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
+        <strong>Erreur !</strong> Une erreur s'est produite lors de l'envoi. Veuillez réessayer.
+      </div>
+
+      <form id="inscription-form" class="max-w-lg mx-auto bg-white p-8 rounded-xl shadow-lg space-y-6">
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Nom complet *</label>
+          <input type="text" name="nom" class="form-input w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:outline-none" placeholder="Votre nom complet" required>
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Email *</label>
+          <input type="email" name="email" class="form-input w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:outline-none" placeholder="votre.email@exemple.com" required>
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Téléphone *</label>
+          <input type="tel" name="telephone" class="form-input w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:outline-none" placeholder="+221 75 229 03 69" required>
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Âge</label>
+          <input type="number" name="age" class="form-input w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:outline-none" placeholder="Votre âge" min="5" max="99">
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Niveau d'expérience</label>
+          <select name="niveau" class="form-input w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:outline-none">
+            <option value="">Sélectionnez votre niveau</option>
+            <option value="debutant">Débutant</option>
+            <option value="intermediaire">Intermédiaire</option>
+            <option value="avance">Avancé</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Message</label>
+          <textarea name="message" class="form-input w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:outline-none" rows="4" placeholder="Parlez-nous de votre motivation, vos objectifs..."></textarea>
+        </div>
+        <button type="submit" class="btn-primary w-full py-4 rounded-lg font-bold text-lg flex items-center justify-center">
+          <span id="btn-text">Envoyer ma demande</span>
+          <div id="btn-loading" class="loading spinner ml-2"></div>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="py-16 px-6 bg-yellow-400 text-blue-900">
+    <div class="container mx-auto">
+      <h2 class="text-4xl font-bold text-center mb-12">Contact</h2>
+      <div class="grid md:grid-cols-3 gap-8 text-center">
+        <div class="bg-white p-6 rounded-xl shadow-lg">
+          <h3 class="font-bold text-xl mb-2">Email</h3>
+          <p><a href="mailto:contact@vovinam-dojo.com" class="underline hover:text-blue-700">contact@vovinam-dojo.com</a></p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-lg">
+          <h3 class="font-bold text-xl mb-2">Téléphone</h3>
+          <p><a href="tel:+221752290369" class="underline hover:text-blue-700">+221 75 229 03 69</a></p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-lg">
+          <h3 class="font-bold text-xl mb-2">Adresse</h3>
+          <p>Dakar, Sénégal</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Paiement -->
+    <section class="py-12 bg-gray-50">
+      <div class="max-w-6xl mx-auto px-6 text-center">
+        <h2 class="text-3xl font-bold text-blue-900 mb-6">Paiement en ligne</h2>
+        <p class="text-gray-600 mb-8">Effectuez votre paiement d'inscription de manière sécurisée via PayPal</p>
+        <a href="/payment" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700">
+          Accéder au paiement
+        </a>
+      </div>
+    </section>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-blue-900 text-yellow-400 text-center p-6">
+    <p>&copy; 2025 Vovinam Việt Võ Đạo - Mon Dojo. Tous droits réservés.</p>
+  </footer>
+
+  <script>
+    document.getElementById('inscription-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const form = e.target;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      
+      // Afficher le loading
+      document.getElementById('btn-text').textContent = 'Envoi en cours...';
+      document.getElementById('btn-loading').style.display = 'block';
+      
+      // Cacher les messages précédents
+      document.getElementById('success-message').style.display = 'none';
+      document.getElementById('error-message').style.display = 'none';
+      
+      try {
+        const response = await fetch('/api/inscription', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+          // Succès
+          const result = await response.json();
+          
+          // Envoyer un email de confirmation via Gmail
+          try {
+            await fetch('/api/send_confirmation_email', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                recipient_email: data.email,
+                subject: 'Confirmation d\'inscription - Vovinam Dojo',
+                body: `Bonjour ${data.nom},\n\nMerci pour votre inscription au Vovinam Dojo !\n\nNous avons bien reçu votre demande et nous vous recontacterons bientôt pour confirmer votre participation.\n\nCordialement,\nL'équipe Vovinam Dojo`
+              })
+            });
+          } catch (emailError) {
+            console.log('Email non envoyé (non critique):', emailError);
+          }
+          
+          document.getElementById('success-message').style.display = 'block';
+          form.reset();
+          // Scroll vers le message de succès
+          document.getElementById('success-message').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          throw new Error('Erreur serveur');
+        }
+      } catch (error) {
+        // Erreur
+        document.getElementById('error-message').style.display = 'block';
+        document.getElementById('error-message').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } finally {
+        // Remettre le bouton normal
+        document.getElementById('btn-text').textContent = 'Envoyer ma demande';
+        document.getElementById('btn-loading').style.display = 'none';
+      }
+    });
+
+    // Smooth scrolling pour les liens d'ancrage
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administration - Vovinam Dojo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .table-container {
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .status-en_attente { background-color: #fef3c7; color: #92400e; }
+    .status-contacte { background-color: #dbeafe; color: #1e40af; }
+    .status-accepte { background-color: #d1fae5; color: #065f46; }
+    .status-refuse { background-color: #fee2e2; color: #991b1b; }
+  </style>
+</head>
+<body class="bg-gray-100">
+
+  <div class="container mx-auto px-6 py-8">
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-blue-900">Administration - Inscriptions Vovinam</h1>
+        <button onclick="refreshData()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+          Actualiser
+        </button>
+      </div>
+
+      <!-- Statistiques -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-blue-50 p-4 rounded-lg">
+          <h3 class="text-lg font-semibold text-blue-900">Total</h3>
+          <p id="total-count" class="text-2xl font-bold text-blue-600">0</p>
+        </div>
+        <div class="bg-yellow-50 p-4 rounded-lg">
+          <h3 class="text-lg font-semibold text-yellow-900">En attente</h3>
+          <p id="pending-count" class="text-2xl font-bold text-yellow-600">0</p>
+        </div>
+        <div class="bg-green-50 p-4 rounded-lg">
+          <h3 class="text-lg font-semibold text-green-900">Acceptées</h3>
+          <p id="accepted-count" class="text-2xl font-bold text-green-600">0</p>
+        </div>
+        <div class="bg-red-50 p-4 rounded-lg">
+          <h3 class="text-lg font-semibold text-red-900">Refusées</h3>
+          <p id="refused-count" class="text-2xl font-bold text-red-600">0</p>
+        </div>
+      </div>
+
+      <!-- Tableau des inscriptions -->
+      <div class="table-container">
+        <table class="w-full border-collapse border border-gray-300">
+          <thead class="bg-gray-50 sticky top-0">
+            <tr>
+              <th class="border border-gray-300 px-4 py-2 text-left">ID</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Nom</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Email</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Téléphone</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Âge</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Niveau</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Date</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Statut</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="inscriptions-table">
+            <!-- Les données seront chargées ici -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Message si aucune inscription -->
+      <div id="no-data" class="text-center py-8 hidden">
+        <p class="text-gray-500 text-lg">Aucune inscription trouvée.</p>
+      </div>
+    </div>
+
+    <!-- Retour au site principal -->
+    <div class="mt-6 text-center">
+      <a href="/" class="bg-blue-900 text-yellow-400 px-6 py-3 rounded-lg font-bold hover:bg-blue-700 inline-block">
+        Retour au site principal
+      </a>
+    </div>
+  </div>
+
+  <!-- Modal pour voir les détails -->
+  <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg max-w-md w-full mx-4">
+      <h3 class="text-xl font-bold mb-4">Détails de l'inscription</h3>
+      <div id="modal-content">
+        <!-- Contenu du modal -->
+      </div>
+      <div class="mt-4 flex justify-end space-x-2">
+        <button onclick="closeModal()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+          Fermer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let inscriptions = [];
+
+    async function loadInscriptions() {
+      try {
+        const response = await fetch('/api/inscriptions');
+        if (response.ok) {
+          inscriptions = await response.json();
+          displayInscriptions();
+          updateStats();
+        } else {
+          console.error('Erreur lors du chargement des inscriptions');
+        }
+      } catch (error) {
+        console.error('Erreur:', error);
+      }
+    }
+
+    function displayInscriptions() {
+      const tbody = document.getElementById('inscriptions-table');
+      const noData = document.getElementById('no-data');
+      
+      if (inscriptions.length === 0) {
+        tbody.innerHTML = '';
+        noData.classList.remove('hidden');
+        return;
+      }
+      
+      noData.classList.add('hidden');
+      
+      tbody.innerHTML = inscriptions.map(inscription => `
+        <tr class="hover:bg-gray-50">
+          <td class="border border-gray-300 px-4 py-2">${inscription.id}</td>
+          <td class="border border-gray-300 px-4 py-2 font-medium">${inscription.nom}</td>
+          <td class="border border-gray-300 px-4 py-2">${inscription.email}</td>
+          <td class="border border-gray-300 px-4 py-2">${inscription.telephone}</td>
+          <td class="border border-gray-300 px-4 py-2">${inscription.age || '-'}</td>
+          <td class="border border-gray-300 px-4 py-2">${inscription.niveau || '-'}</td>
+          <td class="border border-gray-300 px-4 py-2">${formatDate(inscription.date_inscription)}</td>
+          <td class="border border-gray-300 px-4 py-2">
+            <span class="status-badge status-${inscription.statut}">${getStatusText(inscription.statut)}</span>
+          </td>
+          <td class="border border-gray-300 px-4 py-2">
+            <button onclick="showDetails(${inscription.id})" class="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600 mr-1">
+              Voir
+            </button>
+            <select onchange="updateStatus(${inscription.id}, this.value)" class="text-sm border rounded px-1 py-1">
+              <option value="en_attente" ${inscription.statut === 'en_attente' ? 'selected' : ''}>En attente</option>
+              <option value="contacte" ${inscription.statut === 'contacte' ? 'selected' : ''}>Contacté</option>
+              <option value="accepte" ${inscription.statut === 'accepte' ? 'selected' : ''}>Accepté</option>
+              <option value="refuse" ${inscription.statut === 'refuse' ? 'selected' : ''}>Refusé</option>
+            </select>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function updateStats() {
+      document.getElementById('total-count').textContent = inscriptions.length;
+      document.getElementById('pending-count').textContent = inscriptions.filter(i => i.statut === 'en_attente').length;
+      document.getElementById('accepted-count').textContent = inscriptions.filter(i => i.statut === 'accepte').length;
+      document.getElementById('refused-count').textContent = inscriptions.filter(i => i.statut === 'refuse').length;
+    }
+
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('fr-FR') + ' ' + date.toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'});
+    }
+
+    function getStatusText(status) {
+      const statusMap = {
+        'en_attente': 'En attente',
+        'contacte': 'Contacté',
+        'accepte': 'Accepté',
+        'refuse': 'Refusé'
+      };
+      return statusMap[status] || status;
+    }
+
+    function showDetails(id) {
+      const inscription = inscriptions.find(i => i.id === id);
+      if (!inscription) return;
+
+      const modalContent = document.getElementById('modal-content');
+      modalContent.innerHTML = `
+        <div class="space-y-3">
+          <div><strong>Nom:</strong> ${inscription.nom}</div>
+          <div><strong>Email:</strong> ${inscription.email}</div>
+          <div><strong>Téléphone:</strong> ${inscription.telephone}</div>
+          <div><strong>Âge:</strong> ${inscription.age || 'Non spécifié'}</div>
+          <div><strong>Niveau:</strong> ${inscription.niveau || 'Non spécifié'}</div>
+          <div><strong>Date d'inscription:</strong> ${formatDate(inscription.date_inscription)}</div>
+          <div><strong>Statut:</strong> <span class="status-badge status-${inscription.statut}">${getStatusText(inscription.statut)}</span></div>
+          ${inscription.message ? `<div><strong>Message:</strong><br><div class="bg-gray-50 p-3 rounded mt-2">${inscription.message}</div></div>` : ''}
+        </div>
+      `;
+      
+      document.getElementById('modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.add('hidden');
+    }
+
+    async function updateStatus(id, newStatus) {
+      try {
+        const response = await fetch(`/api/inscription/${id}/statut`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ statut: newStatus })
+        });
+
+        if (response.ok) {
+          // Recharger les données
+          await loadInscriptions();
+        } else {
+          alert('Erreur lors de la mise à jour du statut');
+        }
+      } catch (error) {
+        console.error('Erreur:', error);
+        alert('Erreur lors de la mise à jour du statut');
+      }
+    }
+
+    function refreshData() {
+      loadInscriptions();
+    }
+
+    // Charger les données au démarrage
+    document.addEventListener('DOMContentLoaded', loadInscriptions);
+
+    // Actualiser automatiquement toutes les 30 secondes
+    setInterval(loadInscriptions, 30000);
+  </script>
+
+</body>
+</html>
+

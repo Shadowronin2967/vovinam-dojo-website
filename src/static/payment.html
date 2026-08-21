@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paiement - Vovinam Dojo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID"></script>
+</head>
+<body class="bg-gray-100">
+
+  <div class="container mx-auto px-6 py-8">
+    <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6">
+      <h1 class="text-3xl font-bold text-blue-900 mb-6">Paiement d'inscription</h1>
+
+      <!-- Formulaire de paiement -->
+      <form id="payment-form" class="space-y-4">
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Montant (XOF)</label>
+          <input type="number" id="amount" name="amount" placeholder="50000" class="w-full border-2 border-gray-300 rounded-lg px-4 py-3" required>
+        </div>
+
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Email</label>
+          <input type="email" id="email" name="email" placeholder="votre.email@exemple.com" class="w-full border-2 border-gray-300 rounded-lg px-4 py-3" required>
+        </div>
+
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Nom complet</label>
+          <input type="text" id="name" name="name" placeholder="Votre nom" class="w-full border-2 border-gray-300 rounded-lg px-4 py-3" required>
+        </div>
+
+        <button type="button" onclick="createPayPalInvoice()" class="w-full bg-blue-600 text-white px-4 py-3 rounded-lg font-bold hover:bg-blue-700">
+          Créer une facture PayPal
+        </button>
+      </form>
+
+      <!-- PayPal Container -->
+      <div id="paypal-button-container" class="mt-6"></div>
+
+      <!-- Messages -->
+      <div id="success-message" class="mt-4 p-4 bg-green-100 text-green-700 rounded-lg hidden">
+        ✓ Paiement réussi ! Merci pour votre inscription.
+      </div>
+      <div id="error-message" class="mt-4 p-4 bg-red-100 text-red-700 rounded-lg hidden"></div>
+
+      <!-- Retour -->
+      <div class="mt-6 text-center">
+        <a href="/" class="text-blue-600 hover:text-blue-800 font-medium">Retour au site</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function createPayPalInvoice() {
+      const amount = document.getElementById('amount').value;
+      const email = document.getElementById('email').value;
+      const name = document.getElementById('name').value;
+
+      if (!amount || !email || !name) {
+        showError('Veuillez remplir tous les champs');
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/paypal/create_invoice', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            business_email: 'contact@vovinam-dojo.com',
+            amount_value: parseFloat(amount),
+            amount_currency_code: 'XOF',
+            business_name: 'Vovinam Dojo',
+            product_name: 'Inscription Vovinam',
+            note_from_seller: `Inscription pour ${name}`
+          })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          showSuccess('Facture créée avec succès ! Lien PayPal généré.');
+          console.log('Réponse PayPal:', data);
+          // Vous pouvez rediriger vers le lien PayPal ici
+        } else {
+          const error = await response.json();
+          showError('Erreur lors de la création de la facture: ' + error.error);
+        }
+      } catch (error) {
+        showError('Erreur: ' + error.message);
+      }
+    }
+
+    function showSuccess(message) {
+      const successDiv = document.getElementById('success-message');
+      successDiv.textContent = '✓ ' + message;
+      successDiv.classList.remove('hidden');
+      document.getElementById('error-message').classList.add('hidden');
+    }
+
+    function showError(message) {
+      const errorDiv = document.getElementById('error-message');
+      errorDiv.textContent = '✗ ' + message;
+      errorDiv.classList.remove('hidden');
+      document.getElementById('success-message').classList.add('hidden');
+    }
+  </script>
+
+</body>
+</html>

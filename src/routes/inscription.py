@@ -65,8 +65,8 @@ def create_inscription():
         db.session.add(nouvelle_inscription)
         db.session.commit()
 
-        # Envoi vers n8n pour automatisation
-        n8n_url = os.getenv("N8N_WEBHOOK_URL", "https://fallou1997.app.n8n.cloud/webhook/nouvelle-inscription")
+        # Envoi vers n8n pour automatisation (optionnel, configuré dans Railway)
+        n8n_url = os.getenv("N8N_WEBHOOK_URL", "").strip()
         if n8n_url:
             try:
                 requests.post(n8n_url, json=nouvelle_inscription.to_dict(), timeout=5)
@@ -122,4 +122,3 @@ def update_statut(inscription_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': 'Erreur lors de la mise à jour'}), 500
-

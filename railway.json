@@ -12,9 +12,6 @@
         "startCommand": "gunicorn --bind 0.0.0.0:$PORT src.main:app",
         "healthcheckPath": "/api/health",
         "restartPolicyType": "ON_FAILURE"
-      },
-      "env": {
-        "N8N_WEBHOOK_URL": "https://fallou1997.app.n8n.cloud/webhook/nouvelle-inscription"
       }
     }
   }

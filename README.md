@@ -60,7 +60,19 @@ vovinam-dojo-website/
 SECRET_KEY=votre_clé_secrète
 FLASK_ENV=production
 DATABASE_URL=postgresql://...
+N8N_WEBHOOK_URL=https://votre-espace.app.n8n.cloud/webhook/nouvelle-inscription
 ```
+
+### Connexion n8n
+
+L’adresse `https://skyhook.app.n8n.cloud/assistant` est l’interface de votre espace n8n, pas l’adresse à mettre dans le site. Pour recevoir les demandes d’inscription :
+
+1. Dans n8n, créez un workflow avec un déclencheur **Webhook** en méthode `POST` et le chemin `nouvelle-inscription`.
+2. Ajoutez l’action de notification souhaitée (Gmail, Telegram ou autre), puis activez le workflow.
+3. Copiez l’**URL Production** du Webhook, qui ressemble à `https://skyhook.app.n8n.cloud/webhook/nouvelle-inscription`.
+4. Dans Railway, ouvrez **Variables** et ajoutez `N8N_WEBHOOK_URL` avec cette URL complète.
+
+Si cette variable n’est pas définie, le site continue d’enregistrer les inscriptions normalement, sans tenter d’appeler n8n.
 
 ## 📞 Informations de Contact
 
